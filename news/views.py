@@ -41,8 +41,14 @@ def is_staff_member(user):
 
 
 def index(request):
-    """Display the homepage with a list of all approved articles and
-    the registration form."""
+    """
+    Renders the main landing page of the news portal.
+
+    Args:
+        request: The HTTP request object.
+    Returns:
+        A rendered HTML page containing a list of approved articles and
+    """
     articles = Article.objects.filter(approved=True).order_by("-created_at")
 
     # Form instance added here so it renders on the main page
@@ -58,8 +64,14 @@ def index(request):
 
 def article_detail(request, article_id):
     """
-    Display the full content of a specific article.
-    Allows Editors and Authors to view unapproved drafts.
+    Handles the retrieval and display of a single news article.
+
+    Args:
+        request: The HTTP request object.
+        article_id (int): The primary key of the article to display.
+    Raises:
+        Http404: If the article is unapproved and the user is not the author
+        or an editor.
     """
     # 1. Fetch the article by ID only (removing the strict approved=
     # True filter)
@@ -95,8 +107,13 @@ def editor_dashboard(request):
 @user_passes_test(is_editor)
 def approve_article(request, article_id):
     """
-    Approve an article, notify subscribers via email, and trigger
-    a mock social media post via an external API.
+    Handles the retrieval and display of a single news article.
+    
+    Args:
+        request: The HTTP request object.
+        article_id (int): The primary key of the article to display.
+    Raises:
+        Http404: If the article is unapproved and the user is not the author or an editor.
     """
     article = get_object_or_404(Article, id=article_id)
 
