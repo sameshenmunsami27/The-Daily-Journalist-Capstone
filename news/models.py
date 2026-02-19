@@ -69,6 +69,10 @@ class Article(models.Model):
     """
     Represents a news article created by a Journalist.
     Requires approval by an Editor before becoming publicly visible.
+
+    Attributes:
+        approved (bool): Status indicating if the article is live.
+        publisher (User): The editor who oversaw the publication.
     """
 
     title = models.CharField(max_length=200)
