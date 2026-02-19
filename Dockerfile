@@ -2,8 +2,8 @@
 FROM python:3.11-slim
 
 # 2. Prevent Python from writing .pyc files and enable real-time logging
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 # 3. Set the directory inside the container
 WORKDIR /app
