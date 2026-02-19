@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{% if newsletter %}Edit{% else %}Create{% endif %} Newsletter</h2>
+<hr>
+
+<form method="POST">
+    {% csrf_token %}
+    
+    <div style="margin-bottom: 15px;">
+        <label><strong>Newsletter Title:</strong></label><br>
+        <input type="text" name="title" value="{{ newsletter.title }}" required style="width: 100%; padding: 8px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label><strong>Description / Introduction:</strong></label><br>
+        <textarea name="description" rows="5" required style="width: 100%; padding: 8px;">{{ newsletter.description }}</textarea>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label><strong>Select Articles to Include:</strong></label>
+        <div style="border: 1px solid #ccc; padding: 10px; max-height: 300px; overflow-y: auto; background: #fdfdfd;">
+            {% for article in articles %}
+                <div style="margin-bottom: 5px;">
+                    <input type="checkbox" name="articles" value="{{ article.id }}" id="art_{{ article.id }}"
+                        {% if newsletter and article in newsletter.articles.all %}checked{% endif %}>
+                    <label for="art_{{ article.id }}">{{ article.title }} (by {{ article.author.username }})</label>
+                </div>
+            {% empty %}
+                <p>No approved articles available to bundle.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <button type="submit" style="background: #27ae60; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 4px;">
+        {% if newsletter %}Save Changes{% else %}Publish Newsletter{% endif %}
+    </button>
+    <a href="{% url 'newsletter_list' %}" style="margin-left: 10px; color: #7f8c8d;">Cancel</a>
+</form>
+{% endblock %}

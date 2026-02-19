@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 450px; margin: 50px auto; padding: 40px; border: 1px solid #e1e4e8; border-radius: 12px; background: #ffffff; box-shadow: 0 10px 25px rgba(0,0,0,0.05); font-family: 'Inter', sans-serif;">
+    
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 2.2rem; color: #2c3e50; margin-bottom: 10px;">Create Account</h2>
+        <div style="width: 50px; height: 3px; background: #f1c40f; margin: 0 auto 15px;"></div>
+        <p style="color: #6c757d; font-size: 0.95rem;">Join the "The Daily Journalist" community today.</p>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        
+        {% for field in form %}
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #495057; font-size: 0.9rem;">
+                    {{ field.label }}
+                </label>
+                
+                {# Custom styling for the inputs and dropdown #}
+                <div style="position: relative;">
+                    {{ field }}
+                </div>
+
+                {% if field.help_text %}
+                    <small style="display: block; color: #adb5bd; margin-top: 5px; font-size: 0.75rem;">{{ field.help_text }}</small>
+                {% endif %}
+                
+                {% for error in field.errors %}
+                    <p style="color: #dc3545; font-size: 0.8rem; margin: 5px 0; font-weight: 500;">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="reg-btn">
+            Create My Account
+        </button>
+    </form>
+    
+    <div style="text-align: center; margin-top: 25px; border-top: 1px solid #f1f3f5; padding-top: 20px;">
+        <p style="color: #6c757d; font-size: 0.9rem;">
+            Already a member? <a href="{% url 'login' %}" style="color: #3498db; text-decoration: none; font-weight: 700;">Login here</a>
+        </p>
+    </div>
+</div>
+
+<style>
+    /* Modern Input & Select Styling */
+    input[type="text"], 
+    input[type="email"], 
+    input[type="password"], 
+    select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #edeff2;
+        border-radius: 8px;
+        box-sizing: border-box;
+        font-size: 1rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        background-color: #f8f9fa;
+        color: #2c3e50;
+    }
+
+    input:focus, select:focus {
+        border-color: #3498db;
+        background-color: #fff;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+    }
+
+    /* Registration Button Styling */
+    .reg-btn {
+        width: 100%;
+        padding: 14px;
+        background-color: #2c3e50;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-top: 10px;
+        transition: transform 0.1s, background-color 0.2s;
+    }
+
+    .reg-btn:hover {
+        background-color: #1a252f;
+        transform: translateY(-1px);
+    }
+
+    .reg-btn:active {
+        transform: translateY(0);
+    }
+
+    /* Styling for the dropdown specifically */
+    select {
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1em;
+    }
+</style>
+{% endblock %}

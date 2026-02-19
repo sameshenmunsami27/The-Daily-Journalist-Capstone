@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<article>
+    <header>
+        <h1>{{ article.title }}</h1>
+        <p>By <strong>{{ article.author.username }}</strong></p>
+        {% if article.publisher %}
+        <p>Published by: <strong>{{ article.publisher.username }}</strong></p>
+        {% endif %}
+    </header>
+
+    <hr>
+
+    {% if user.is_authenticated and user.role.upper == "READER" %}
+    <div style="background: #eef2f7; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #3498db;">
+        <h4 style="margin-top: 0; color: #2c3e50;">Subscription Options</h4>
+
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="{% url 'toggle_subscribe' article.author.id 'journalist' %}"
+                style="display: inline-block; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">
+                {% if user in article.author.journalist_followers.all %}
+                ✓ Subscribed to Writer
+                {% else %}
+                + Subscribe to Writer
+                {% endif %}
+            </a>
+
+            {% if article.publisher %}
+            <a href="{% url 'toggle_subscribe' article.publisher.id 'publisher' %}"
+                style="display: inline-block; padding: 10px 20px; background: #2c3e50; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">
+                {% if user in article.publisher.subscribed_readers.all %}
+                ✓ Subscribed to Publisher
+                {% else %}
+                + Subscribe to Publisher
+                {% endif %}
+            </a>
+            {% else %}
+            <span style="color: #7f8c8d; font-style: italic; padding: 10px;">(No Publisher assigned to this
+                article)</span>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    <section style="line-height: 1.8; margin: 30px 0;">
+        {{ article.content|linebreaks }}
+    </section>
+
+    {% if user == article.author or user.role.upper == "EDITOR" or user.is_superuser %}
+    <div
+        style="margin-top: 25px; padding: 12px 20px; background: #fcfcfc; border: 1px solid #e0e0e0; border-radius: 8px; display: flex; align-items: center; justify-content: space-between;">
+
+        <span style="color: #666; font-size: 0.9rem; font-weight: 500;">
+            Staff Tools:
+        </span>
+
+        <div style="display: flex; gap: 8px;">
+            <a href="{% url 'edit_article' article.id %}"
+                style="padding: 6px 14px; background: #f39c12; color: white; text-decoration: none; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">
+                Edit
+            </a>
+
+            <a href="{% url 'delete_article' article.id %}" onclick="return confirm('Delete this article permanently?')"
+                style="padding: 6px 14px; background: #e74c3c; color: white; text-decoration: none; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">
+                Delete
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <hr style="margin-top: 40px;">
+
+    <section>
+        <h3>Comments ({{ article.comments.count }})</h3>
+        {% for comment in article.comments.all %}
+        <div style="border-bottom: 1px solid #eee; padding: 10px 0;">
+            <strong>{{ comment.author.username }}</strong>: {{ comment.text }}
+        </div>
+        {% empty %}
+        <p>No comments yet.</p>
+        {% endfor %}
+
+        {% if user.is_authenticated %}
+        <form action="{% url 'add_comment' article.id %}" method="POST" style="margin-top: 15px;">
+            {% csrf_token %}
+            <textarea name="comment_text" style="width: 100%; height: 60px;" placeholder="Add a comment..."
+                required></textarea><br>
+            <button type="submit"
+                style="margin-top: 5px; padding: 8px 15px; background: #2c3e50; color: white; border: none; cursor: pointer;">Post</button>
+        </form>
+        {% endif %}
+    </section>
+</article>
+{% endblock %}

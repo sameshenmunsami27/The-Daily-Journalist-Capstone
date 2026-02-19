@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}The Daily Journalist{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; line-height: 1.6; color: #333; background-color: #fcfcfc; }
+        
+        /* Navigation Bar */
+        nav { 
+            background: #2c3e50; 
+            color: white; 
+            padding: 1.5rem 2rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
+        }
+
+        /* LARGE OUTSTANDING LOGO WITH YEAR */
+        .logo-container {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+
+        .logo { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 2.8rem; 
+            letter-spacing: -2px;
+            line-height: 0.9;
+            flex-shrink: 0;
+            color: white;
+            text-decoration: none;
+        }
+        .logo span { color: #f1c40f; }
+
+        /* Style for the 2026 text */
+        .brand-year {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: #bdc3c7;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-left: 2px solid #555;
+            padding-left: 10px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        nav a { color: white; text-decoration: none; margin-left: 20px; transition: 0.3s; font-weight: 500; }
+        nav a:hover { color: #f1c40f; }
+        
+        .logout-btn {
+            background: none; border: none; color: #bdc3c7; padding: 0; margin-left: 15px;
+            font-family: inherit; font-size: 0.85rem; cursor: pointer; text-decoration: none; transition: 0.3s;
+        }
+        .logout-btn:hover { color: #f1c40f; text-decoration: underline; }
+
+        .nav-write { color: #3498db !important; font-weight: bold; }
+        .nav-newsletter { color: #e67e22 !important; font-weight: bold; }
+        .nav-subs { color: #2ecc71 !important; font-weight: bold; }
+        .nav-editor { color: #f1c40f !important; }
+
+        .container { padding: 40px 20px; max-width: 1100px; margin: auto; min-height: 70vh; }
+        .footer { text-align: center; padding: 30px; font-size: 0.9rem; color: #777; border-top: 1px solid #eee; margin-top: 50px; }
+        
+        .messages { list-style: none; margin: 0 0 20px 0; padding: 0; width: 100%; }
+        .alert { padding: 15px; margin-bottom: 20px; border-radius: 4px; border: 1px solid transparent; }
+        .alert-success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
+        .alert-error { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+
+        /* Standardized form styling for Auth pages */
+        .auth-card {
+            max-width: 450px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid #e1e4e8;
+        }
+        .auth-card h2 { margin-top: 0; font-family: 'Playfair Display', serif; color: #2c3e50; text-align: center; }
+        .auth-btn { 
+            width: 100%; padding: 12px; background: #2c3e50; color: white; border: none; 
+            border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1rem; 
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo-container">
+        <a href="{% url 'index' %}" class="logo">The <span>Daily</span> Journalist</a>
+        <div class="brand-year">2026</div>
+    </div>
+    
+    <div>
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'newsletter_list' %}" class="nav-newsletter">Newsletters</a>
+        
+        {% if user.is_authenticated %}
+            {% if user.role == "READER" %}
+                <a href="{% url 'my_subscriptions' %}" class="nav-subs">My Subscriptions</a>
+            {% endif %}
+
+            {% if user.role == "JOURNALIST" %}
+                <a href="{% url 'create_article' %}" class="nav-write">Write Article</a>
+            {% endif %}
+
+            {% if user.role == "EDITOR" or user.is_superuser %}
+                <a href="{% url 'editor_dashboard' %}" class="nav-editor">Editor Dashboard</a>
+            {% endif %}
+            
+            <span style="margin-left: 20px; border-left: 1px solid #555; padding-left: 20px;">
+                Hi, <strong>{{ user.username }}</strong>
+            </span>
+            
+            <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">(Logout)</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}" class="nav-write">Register</a>
+        {% endif %}
+    </div>
+</nav>
+
+<div class="container">
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+</div>
+
+<div class="footer">
+    &copy; 2026 The Daily Journalist News Portal
+</div>
+
+</body>
+</html>

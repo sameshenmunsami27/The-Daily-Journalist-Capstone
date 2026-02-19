@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Latest News</h1>
+<hr>
+
+{% for article in articles %}
+    <div style="border-bottom: 1px solid #ddd; padding: 10px 0;">
+        <h2><a href="{% url 'article_detail' article.id %}">{{ article.title }}</a></h2>
+        <p>
+            By: <strong>{{ article.author.username }}</strong> | 
+            Published by: <em>{% if article.publisher %}{{ article.publisher.username }}{% else %}The Daily Journalist{% endif %}</em>
+        </p>
+        <p>{{ article.content|truncatewords:30 }}</p>
+        <small>Posted on: {{ article.created_at|date:"F j, Y" }}</small>
+    </div>
+{% empty %}
+    <p>No articles available yet.</p>
+{% endfor %}
+{% endblock %}

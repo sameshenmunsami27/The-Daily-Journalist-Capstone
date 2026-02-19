@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 40px auto; padding: 30px; border: 1px solid #e1e4e8; border-radius: 12px; background: white; box-shadow: 0 10px 25px rgba(0,0,0,0.05); font-family: 'Inter', sans-serif;">
+    <h2 style="text-align: center; font-family: 'Playfair Display', serif; color: #2c3e50; margin-bottom: 25px;">Login</h2>
+
+    {% if form.errors %}
+        <div style="color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 0.85rem; text-align: center;">
+            Your username and password didn't match. Please try again.
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #495057; font-size: 0.9rem;">Username:</label>
+            <input type="text" name="username" style="width: 100%; padding: 12px; border: 2px solid #edeff2; border-radius: 8px; background-color: #f8f9fa; box-sizing: border-box;" required>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #495057; font-size: 0.9rem;">Password:</label>
+            <input type="password" name="password" style="width: 100%; padding: 12px; border: 2px solid #edeff2; border-radius: 8px; background-color: #f8f9fa; box-sizing: border-box;" required>
+        </div>
+        
+        <div style="margin-bottom: 25px; text-align: right;">
+            <a href="{% url 'password_reset' %}" style="color: #e67e22; font-size: 0.85rem; text-decoration: none; font-weight: 500;">Forgotten password?</a>
+        </div>
+
+        <button type="submit" style="width: 100%; padding: 14px; background: #2c3e50; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 1rem; transition: background 0.2s;">
+            Login
+        </button>
+    </form>
+    
+    <div style="text-align: center; margin-top: 25px; border-top: 1px solid #f1f3f5; padding-top: 20px;">
+        <p style="color: #6c757d; font-size: 0.9rem;">
+            Don't have an account? <a href="{% url 'register' %}" style="color: #3498db; text-decoration: none; font-weight: 700;">Register here</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

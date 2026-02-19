@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2>Available Newsletters</h2>
+    
+    {% if user.is_authenticated and user.role == "JOURNALIST" %}
+        <a href="{% url 'create_newsletter' %}" 
+           style="padding: 10px 20px; background: #e67e22; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">
+           + Create New Newsletter
+        </a>
+    {% endif %}
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+    {% for newsletter in newsletters %}
+        <div style="background: white; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <h3 style="margin-top: 0;">{{ newsletter.title }}</h3>
+            <p style="color: #666; font-size: 0.9rem;">By {{ newsletter.author.username }}</p>
+            <p>{{ newsletter.description|truncatewords:20 }}</p>
+            <a href="{% url 'newsletter_detail' newsletter.id %}" style="color: #3498db; font-weight: bold; text-decoration: none;">
+                View Issues &rarr;
+            </a>
+        </div>
+    {% empty %}
+        <p>No newsletters have been published yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

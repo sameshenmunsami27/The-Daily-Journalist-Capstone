@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>My Subscriptions</h2>
+<p>Manage the contributors and publishers you are currently following.</p>
+
+<hr>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 20px;">
+    
+    <div>
+        <h3>Followed Journalists</h3>
+        {% for journalist in journalists %}
+            <div style="background: #fff; padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                <span><strong>{{ journalist.username }}</strong></span>
+                <a href="{% url 'toggle_subscribe' journalist.id 'journalist' %}" style="color: #e74c3c; text-decoration: none; font-size: 0.8rem;">Unfollow</a>
+            </div>
+        {% empty %}
+            <p style="color: #888;">You aren't following any journalists yet.</p>
+        {% endfor %}
+    </div>
+
+    <div>
+        <h3>Followed Publishers</h3>
+        {% for publisher in publishers %}
+            <div style="background: #fff; padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                <span><strong>{{ publisher.username }}</strong></span>
+                <a href="{% url 'toggle_subscribe' publisher.id 'publisher' %}" style="color: #e74c3c; text-decoration: none; font-size: 0.8rem;">Unfollow</a>
+            </div>
+        {% empty %}
+            <p style="color: #888;">You aren't following any publishers yet.</p>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
