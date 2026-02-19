@@ -1,7 +1,6 @@
 """
-URL Configuration for the News Application.
-This module maps URL patterns to views for the web frontend and
-registers ViewSets with the REST Framework router for the API endpoints.
+URL configuration for the news app.
+Defines routes for article viewing, editor dashboards, and user subscriptions.
 """
 
 from django.urls import path, include
