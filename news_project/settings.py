@@ -65,8 +65,11 @@ DATABASES = {
         "NAME": "news_db",
         "USER": "root",
         "PASSWORD": "",
-        "HOST": "127.0.0.1",
+        "HOST": "host.docker.internal",  # Updated for Docker for connectivity
         "PORT": "3306",
+        "OPTIONS": {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
 
