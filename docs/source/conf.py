@@ -15,8 +15,8 @@ django.setup()
 
 # Project information
 project = 'The Daily Journalist'
-copyright = '2026, Your Name'
-author = 'Your Name'
+copyright = '2026, Sameshen Munsami'
+author = 'Sameshen'
 release = '1.0.0'
 
 
