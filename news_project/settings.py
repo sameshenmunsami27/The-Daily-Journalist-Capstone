@@ -6,13 +6,11 @@ and email server configurations.
 """
 
 from pathlib import Path
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-SECRET_KEY = (
-    "django-insecure-=(irsjgmurz1fcp2dez3)"
-    "+h1jjf=9-=habfb=metpa(yl8#@hm"
-)
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 
+                            'django-insecure-placeholder-key')
 DEBUG = True
 ALLOWED_HOSTS = []
 
@@ -59,13 +57,16 @@ TEMPLATES = [
 WSGI_APPLICATION = "news_project.wsgi.application"
 
 # DATABASE CONFIGURATION (No Password)
+# DATABASE CONFIGURATION (No Password)
+# host.docker.internal works for Local Windows Docker
+# 'db' is the standard for Docker Playground/Compose environments
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "news_db",
         "USER": "root",
         "PASSWORD": "",
-        "HOST": "host.docker.internal",  # Updated for Docker for connectivity
+        "HOST": os.environ.get("DATABASE_HOST", "host.docker.internal"),
         "PORT": "3306",
         "OPTIONS": {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
@@ -118,8 +119,8 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "sameshenmunsami27@gmail.com"
-EMAIL_HOST_PASSWORD = "bhmkoeolypavltux"
+EMAIL_HOST_USER = os.environ.get('EMAIL_USER', 'sameshenmunsami27@gmail.com')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD', '')
 DEFAULT_FROM_EMAIL = "The Daily Journalist <sameshenmunsami27@gmail.com>"
 
 # SECURITY
