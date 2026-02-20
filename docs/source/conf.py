@@ -8,7 +8,7 @@ from unittest.mock import MagicMock
 # Path setup 
 sys.path.insert(0, os.path.abspath('../..'))
 
-# --- THE "STRICT" BYPASS START ---
+#  BYPASS START 
 if not settings.configured:
     os.environ['DJANGO_SETTINGS_MODULE'] = 'news_project.settings'
     settings.configure(
@@ -40,7 +40,7 @@ if not settings.configured:
 class MockMigrator:
     def __getattr__(self, name): return MagicMock()
 sys.modules['django.db.migrations'] = MockMigrator()
-# --- THE "STRICT" BYPASS END ---
+# THE "STRICT" BYPASS END 
 
 # Project information
 project = 'The Daily Journalist'
@@ -68,6 +68,16 @@ html_static_path = ['_static']
 
 # Fix for Python 3.13 / Sphinx ValueError
 def setup(app):
+    """
+    Custom setup to prevent Sphinx from crashing during documentation.
+
+    It modifies how Sphinx describes Python objects so that if it hits a 
+    complex Django field it doesn't understand, it will simply record 
+    the text version of that object instead of throwing an error.
+
+    Args:
+        app: The Sphinx application object.
+    """
     from sphinx.util import inspect
     
     orig_object_description = inspect.object_description
