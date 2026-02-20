@@ -137,7 +137,7 @@ GitHub.sublime-settings
 .history
 
 # Secrets
-secrets.txt
+secrets_keys.txt
 
 # Environment
 .venv/
