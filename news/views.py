@@ -108,12 +108,13 @@ def editor_dashboard(request):
 def approve_article(request, article_id):
     """
     Handles the retrieval and display of a single news article.
-    
+
     Args:
         request: The HTTP request object.
         article_id (int): The primary key of the article to display.
     Raises:
-        Http404: If the article is unapproved and the user is not the author or an editor.
+        Http404: If the article is unapproved and the user is not the author
+        or an editor.
     """
     article = get_object_or_404(Article, id=article_id)
 
@@ -424,3 +425,13 @@ def register(request):
 
     return render(request, 'register.html',
                   {'form': form})
+
+
+@login_required
+@user_passes_test(is_journalist)
+def journalist_dashboard(request):
+    """Display all articles written by the logged-in journalist."""
+    my_articles = Article.objects.filter(author=request.user).order_by
+    ("-created_at")
+    return render(request, "journalist_dashboard.html", {"articles":
+                                                         my_articles})

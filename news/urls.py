@@ -19,8 +19,7 @@ router.register(r"newsletters", NewsletterViewSet, basename="api-newsletters")
 urlpatterns = [
     #  Public Views
     path("", views.index, name="index"),
-    path("article/<int:article_id>/", views.article_detail,
-         name="article_detail"),
+    path("article/<int:article_id>/", views.article_detail, name="article_detail"),
     #  Editor Logic
     path("editor/dashboard/", views.editor_dashboard, name="editor_dashboard"),
     path(
@@ -29,8 +28,7 @@ urlpatterns = [
         name="approve_article",
     ),
     #  Comment Logic
-    path("article/<int:article_id>/comment/", views.add_comment,
-         name="add_comment"),
+    path("article/<int:article_id>/comment/", views.add_comment, name="add_comment"),
     #  Subscription Logic
     path(
         "subscribe/<int:user_id>/<str:follow_type>/",
@@ -38,13 +36,12 @@ urlpatterns = [
         name="toggle_subscribe",
     ),
     path("my-subscriptions/", views.my_subscriptions, name="my_subscriptions"),
-    #  Article Actions (Creation, Edit, Delete)
+    #  Article Actions (Creation, Edit, Delete, Dashboard)
+    path("my-articles/", views.journalist_dashboard, name="journalist_dashboard"),
     path("article/create/", views.create_article, name="create_article"),
-    path("article/edit/<int:article_id>/", views.edit_article,
-         name="edit_article"),
+    path("article/edit/<int:article_id>/", views.edit_article, name="edit_article"),
     path(
-        "article/delete/<int:article_id>/", views.delete_article,
-        name="delete_article"
+        "article/delete/<int:article_id>/", views.delete_article, name="delete_article"
     ),
     #  Newsletter Logic
     path("newsletters/", views.newsletter_list, name="newsletter_list"),
@@ -66,8 +63,7 @@ urlpatterns = [
         name="delete_newsletter",
     ),
     #  Authentication Logic
-    path("login/", LoginView.as_view(template_name="login.html"),
-         name="login"),
+    path("login/", LoginView.as_view(template_name="login.html"), name="login"),
     path("logout/", LogoutView.as_view(next_page="index"), name="logout"),
     # Password Reset Logic
     path(
@@ -99,7 +95,7 @@ urlpatterns = [
         ),
         name="password_reset_complete",
     ),
-    # --- REST API Endpoints ---
+    # REST API Endpoints
     path("api/", include(router.urls)),
     path("api/token/", obtain_auth_token, name="api_token_auth"),
 ]

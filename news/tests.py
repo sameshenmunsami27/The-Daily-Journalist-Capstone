@@ -69,7 +69,7 @@ class NewsAPITests(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    #   READER: SUBSCRIBED CONTENT RETRIEVAL
+    #  READER: SUBSCRIBED CONTENT RETRIEVAL
     def test_reader_subscribed_feed(self):
         """Verify Reader only sees articles from their subscriptions."""
         self.client.force_authenticate(user=self.reader)

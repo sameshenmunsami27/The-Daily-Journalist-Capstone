@@ -1,69 +1,78 @@
-# The Daily Journalist
+# The Daily Journalist 
 
-A professional Django-based news application featuring user subscriptions, article management, and journalist creation of articles and newsletters
+A professional Django-based news management system. Follow these steps **strictly in order** to set up and run the application.
 
-# Prerequisites
-* Python 3.11+
-* MySQL Server
-* Docker (Optional for containerization)
+---
 
-# Setup with Virtual Environment (venv)
-**Create the Virtual Environment:**
-   Open PowerShell in the project root and run:
-   ```powershell
-   python -m venv .venv
+## 1. Step One: Clone the Project
+First, bring the code from GitHub to your local machine.
 
-Activate the Environment:
+1. **Open your terminal** (PowerShell or Git Bash).
+2. **Clone the repository**:
+   ```bash
+   git clone [https://github.com/your-profile/news_application.git](https://github.com/your-profile/news_application.git)
+Enter the directory:
+
+Bash
+cd news_application
+2. Step Two: Local Environment Setup
+Before configuring the database, you must set up your Python environment.
+
+Create a Virtual Environment:
+
 PowerShell
-.\.venv\Scripts\Activate.ps1
+python -m venv .venv
+Activate the Environment:
+
+PowerShell: .\.venv\Scripts\Activate.ps1
+
+CMD: .\.venv\Scripts\activate.bat
 
 Install Dependencies:
-Ensure your requirements.txt is in the folder, then run:
+
 PowerShell
 pip install -r requirements.txt
+3. Step Three: MySQL Database Creation
+Crucial: You must create the database schema before running migrations or starting the app.
 
-Set up the Database:
-Ensure your MySQL server is running and the credentials in settings.py match your local setup (see secrets.txt). Then run:
+Open MySQL Workbench or the MySQL Command Line.
+
+Run the following command:
+
+SQL
+CREATE DATABASE news_db;
+4. Step Four: Configuration & Secrets
+Locate the secrets_keys.txt file in the root folder.
+
+Ensure your MYSQL_USER and MYSQL_PASSWORD in that file match your local MySQL credentials.
+
+Open news_project/settings.py to verify the DATABASES section is pulling these secrets correctly.
+
+5. Step Five: Database Migrations
+Build the tables and apply the unique email constraints:
+
 PowerShell
+python manage.py makemigrations
 python manage.py migrate
+6. Step Six: Run the Application
+Create a Superuser:
 
-Start the Development Server:
+PowerShell
+python manage.py createsuperuser
+Start the Server:
+
 PowerShell
 python manage.py runserver
-Access the app at: http://127.0.0.1:8000
+Access the site at: http://127.0.0.1:8000/
 
+ Alternative: Docker Setup (Automated)
+If you prefer using Docker, follow these steps after cloning the project:
 
-
-# RUN DOCKER
-Build the Docker Image:
-Open your terminal in the project root (where the Dockerfile is located) and run:
-
-PowerShell
-docker build -t the-daily-journalist .
-Run the Container:
+Build and Start Containers:
 
 PowerShell
-docker run -p 8000:8000 the-daily-journalist
-Database Connectivity:
-The application is configured to connect to your local MySQL host using host.docker.internal. Ensure your MySQL service is configured to allow connections from the Docker bridge network.
+docker-compose up -d --build
+Run Migrations inside Docker:
 
-Access the app at: http://localhost:8000
-
- Documentation
-Documentation is generated using Sphinx and can be found in the docs/ directory.
-To view the HTML documentation, open:
-docs/build/html/index.html
-
-
-
-1. **Clone the repository:**
-   ```bash
-   git clone <your-repo-url>
-   cd "News Application"
-
-## Setup Secrets
-The application requires sensitive credentials to run (Secret Key and Email Password).
-1. Open the included `secrets.txt` file.
-2. You can either:
-   - Set these as environment variables on your system.
-   - Or, temporarily paste them into the `settings.py` file in the fields labeled `os.environ.get`.   
+PowerShell
+docker-compose exec web python manage.py migrate

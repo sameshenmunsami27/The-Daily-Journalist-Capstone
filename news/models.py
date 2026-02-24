@@ -19,22 +19,22 @@ class User(AbstractUser):
         JOURNALIST = "JOURNALIST", "Journalist"
         EDITOR = "EDITOR", "Editor"
 
-    role = models.CharField(
-        max_length=10,
-        choices=Role.choices,
-        default=Role.READER
-    )
+    # Fix: Ensure email is unique across the database to prevent auth issues
+    email = models.EmailField(unique=True)
 
-    #  READER SUBSCRIPTIONS
+    role = models.CharField(max_length=10, choices=Role.choices, default=Role.READER)
+
+    # READER SUBSCRIPTIONS
     subscribed_publishers = models.ManyToManyField(
-        "self", symmetrical=False, related_name="subscribed_readers",
-        blank=True
+        "self", symmetrical=False, related_name="subscribed_readers", blank=True
     )
 
     subscribed_journalists = models.ManyToManyField(
-        "self", symmetrical=False, related_name="journalist_followers",
-        blank=True
+        "self", symmetrical=False, related_name="journalist_followers", blank=True
     )
+
+    # Ensures email is prompted when creating superusers via CLI
+    REQUIRED_FIELDS = ["email"]
 
     def save(self, *args, **kwargs):
         """
@@ -47,9 +47,7 @@ class User(AbstractUser):
         else:
             self.is_staff = False
 
-        # 2. Save the instance first
-        # Explicitly calling super with the class name can resolve
-        # init/save conflicts
+        # 2. Save the instance
         super(User, self).save(*args, **kwargs)
 
         # 3. Role-Based Field Enforcement
@@ -69,18 +67,11 @@ class Article(models.Model):
     """
     Represents a news article created by a Journalist.
     Requires approval by an Editor before becoming publicly visible.
-
-    Attributes:
-        approved (bool): Status indicating if the article is live.
-        publisher (User): The editor who oversaw the publication.
     """
 
     title = models.CharField(max_length=200)
     content = models.TextField()
-    # Journalist Relation (Published independently)
-    author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="articles"
-    )
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="articles")
     created_at = models.DateTimeField(auto_now_add=True)
     approved = models.BooleanField(default=False)
 
@@ -93,11 +84,9 @@ class Article(models.Model):
     )
 
     class Meta:
-        # Default ordering for MySQL efficiency
-        ordering = ['-created_at']
+        ordering = ["-created_at"]
 
     def __str__(self):
-        """Return the title of the article."""
         return self.title
 
 
@@ -114,7 +103,6 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        """Return a summary of the comment and its author."""
         return f"Comment by {self.author.username} on {self.article.title}"
 
 
@@ -127,15 +115,11 @@ class Newsletter(models.Model):
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # Journalist Relation (Published independently)
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="newsletters"
     )
 
-    articles = models.ManyToManyField(
-        Article, related_name="newsletters", blank=True
-    )
+    articles = models.ManyToManyField(Article, related_name="newsletters", blank=True)
 
     def __str__(self):
-        """Return the title of the newsletter."""
         return self.title

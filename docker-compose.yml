@@ -1,7 +1,5 @@
 services:
-  # Renamed from 'db' to 'news_db' to follow reviewer feedback
-  news_db:
-    container_name: news_db_container
+  db:
     image: mysql:8.0
     environment:
       MYSQL_DATABASE: news_db
@@ -10,9 +8,7 @@ services:
     ports:
       - "3306:3306"
 
-  # Renamed from 'web' to 'news_web'
-  news_web:
-    container_name: news_web_container
+  web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
@@ -20,6 +16,6 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - news_db
+      - db
     environment:
-      - DATABASE_HOST=news_db  # Matches the service name above
+      - DATABASE_HOST=db

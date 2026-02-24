@@ -9,8 +9,29 @@ from pathlib import Path
 import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 
-                            'django-insecure-placeholder-key')
+
+
+# Helper function to read from secrets_keys.txt safely
+def get_secret(key_name, default=None):
+    try:
+        with open(os.path.join(BASE_DIR, "secrets_keys.txt"), "r") as f:
+            for line in f:
+                if "=" in line:
+                    name, value = line.split("=", 1)
+                    if name.strip() == key_name:
+                        return value.strip()
+    except FileNotFoundError:
+        return default
+    return default
+
+
+# SECURITY WARNING: keep the secret key used in production secret!
+# Use parentheses to join the long string and avoid syntax errors
+fallback_key = "django-insecure-=(irsjgmurz1fcp2dez3)+h1jjf=" "9-=habfb=metpa(yl8#@hm"
+
+# Now use it in the function
+SECRET_KEY = get_secret("DJANGO_SECRET_KEY", fallback_key)
+
 DEBUG = True
 ALLOWED_HOSTS = []
 
@@ -21,8 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "rest_framework",  # Added for REST API
-    "rest_framework.authtoken",  # Added for Token Authentication
+    "rest_framework",
+    "rest_framework.authtoken",
     "news.apps.NewsConfig",
 ]
 
@@ -41,7 +62,7 @@ ROOT_URLCONF = "news_project.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],  # Flat templates folder logic
+        "DIRS": [BASE_DIR / "templates"],  # This is the line that finds your HTML files
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -56,34 +77,28 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "news_project.wsgi.application"
 
-# DATABASE CONFIGURATION (No Password)
-# DATABASE CONFIGURATION (No Password)
-# host.docker.internal works for Local Windows Docker
-# 'db' is the standard for Docker Playground/Compose environments
+# DATABASE CONFIGURATION
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "news_db",
-        "USER": "root",
-        "PASSWORD": "",
-        "HOST": os.environ.get("DATABASE_HOST", "host.docker.internal"),
+        "NAME": get_secret("MYSQL_DATABASE", "news_db"),
+        "USER": get_secret("MYSQL_USER", "root"),
+        "PASSWORD": get_secret("MYSQL_PASSWORD", ""),
+        "HOST": os.environ.get("DATABASE_HOST", "127.0.0.1"),
         "PORT": "3306",
         "OPTIONS": {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
         },
     }
 }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation."
-        "UserAttributeSimilarityValidator"
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
     },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation."
-     "CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation."
-     "NumericPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 LANGUAGE_CODE = "en-us"
@@ -93,13 +108,9 @@ USE_TZ = True
 STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-#  CUSTOM PROJECT SETTINGS
-"""
-Project-specific overrides and third-party library configurations.
-"""
+# CUSTOM PROJECT SETTINGS
 AUTH_USER_MODEL = "news.User"
 
-#  REST FRAMEWORK CONFIGURATION
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
@@ -112,24 +123,17 @@ LOGIN_REDIRECT_URL = "index"
 LOGOUT_REDIRECT_URL = "index"
 
 # EMAIL CONFIGURATION (GMAIL)
-"""
-SMTP settings for outgoing article notifications and password resets.
-"""
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('EMAIL_USER', 'sameshenmunsami27@gmail.com')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD', '')
-DEFAULT_FROM_EMAIL = "The Daily Journalist <sameshenmunsami27@gmail.com>"
+EMAIL_HOST_USER = get_secret("EMAIL_USER", "sameshenmunsami27@gmail.com")
+EMAIL_HOST_PASSWORD = get_secret("EMAIL_PASSWORD", "bhmkoeolypavltux")
+DEFAULT_FROM_EMAIL = f"The Daily Journalist <{EMAIL_HOST_USER}>"
 
 # SECURITY
-# Password reset link expires after 3 hours (10800 seconds)
 PASSWORD_RESET_TIMEOUT = 10800
-
 LOGOUT_ON_GET = True
 
 # Registration settings
-ACCOUNT_ADAPTER = 'django.contrib.auth.models.User'
-# If you want users to stay as 'READER' by default
-DEFAULT_USER_ROLE = 'READER'
+DEFAULT_USER_ROLE = "READER"

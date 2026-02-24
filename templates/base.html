@@ -20,48 +20,24 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
         }
 
-        /* LARGE OUTSTANDING LOGO WITH YEAR */
-        .logo-container {
-            display: flex;
-            align-items: baseline;
-            gap: 10px;
-        }
-
-        .logo { 
-            font-family: 'Playfair Display', serif; 
-            font-size: 2.8rem; 
-            letter-spacing: -2px;
-            line-height: 0.9;
-            flex-shrink: 0;
-            color: white;
-            text-decoration: none;
-        }
+        .logo-container { display: flex; align-items: baseline; gap: 10px; }
+        .logo { font-family: 'Playfair Display', serif; font-size: 2.8rem; letter-spacing: -2px; line-height: 0.9; flex-shrink: 0; color: white; text-decoration: none; }
         .logo span { color: #f1c40f; }
 
-        /* Style for the 2026 text */
         .brand-year {
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            color: #bdc3c7;
-            font-weight: 700;
-            letter-spacing: 1px;
-            border-left: 2px solid #555;
-            padding-left: 10px;
-            height: 20px;
-            display: flex;
-            align-items: center;
+            font-family: 'Inter', sans-serif; font-size: 1rem; color: #bdc3c7; font-weight: 700; letter-spacing: 1px;
+            border-left: 2px solid #555; padding-left: 10px; height: 20px; display: flex; align-items: center;
         }
 
         nav a { color: white; text-decoration: none; margin-left: 20px; transition: 0.3s; font-weight: 500; }
         nav a:hover { color: #f1c40f; }
         
-        .logout-btn {
-            background: none; border: none; color: #bdc3c7; padding: 0; margin-left: 15px;
-            font-family: inherit; font-size: 0.85rem; cursor: pointer; text-decoration: none; transition: 0.3s;
-        }
+        .logout-btn { background: none; border: none; color: #bdc3c7; padding: 0; margin-left: 15px; font-family: inherit; font-size: 0.85rem; cursor: pointer; text-decoration: none; transition: 0.3s; }
         .logout-btn:hover { color: #f1c40f; text-decoration: underline; }
 
+        /* Specific Link Colors */
         .nav-write { color: #3498db !important; font-weight: bold; }
+        .nav-mustard { color: #e1ad01 !important; font-weight: bold; } /* Mustard Color */
         .nav-newsletter { color: #e67e22 !important; font-weight: bold; }
         .nav-subs { color: #2ecc71 !important; font-weight: bold; }
         .nav-editor { color: #f1c40f !important; }
@@ -74,21 +50,7 @@
         .alert-success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
         .alert-error { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
 
-        /* Standardized form styling for Auth pages */
-        .auth-card {
-            max-width: 450px;
-            margin: 40px auto;
-            padding: 30px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            border: 1px solid #e1e4e8;
-        }
-        .auth-card h2 { margin-top: 0; font-family: 'Playfair Display', serif; color: #2c3e50; text-align: center; }
-        .auth-btn { 
-            width: 100%; padding: 12px; background: #2c3e50; color: white; border: none; 
-            border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1rem; 
-        }
+        .auth-btn { width: 100%; padding: 12px; background: #2c3e50; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1rem; }
     </style>
 </head>
 <body>
@@ -109,6 +71,7 @@
             {% endif %}
 
             {% if user.role == "JOURNALIST" %}
+                <a href="{% url 'journalist_dashboard' %}" class="nav-mustard">My Articles</a>
                 <a href="{% url 'create_article' %}" class="nav-write">Write Article</a>
             {% endif %}
 
