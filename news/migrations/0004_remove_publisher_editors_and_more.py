@@ -23,7 +23,10 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='article',
             name='publisher',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='published_articles', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db
+                                    .models.deletion.SET_NULL,
+                                    related_name='published_articles',
+                                    to=settings.AUTH_USER_MODEL),
         ),
         migrations.RemoveField(
             model_name='user',
@@ -36,17 +39,23 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='journalist_followers',
-            field=models.ManyToManyField(blank=True, related_name='following_journalists', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(blank=True,
+                                         related_name='following_journalists',
+                                         to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='user',
             name='subscribed_readers',
-            field=models.ManyToManyField(blank=True, related_name='subscribed_publishers', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(blank=True,
+                                         related_name='subscribed_publishers',
+                                         to=settings.AUTH_USER_MODEL),
         ),
         migrations.AlterField(
             model_name='article',
             name='author',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='articles', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey
+            (on_delete=django.db.models.deletion.CASCADE,
+             related_name='articles', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AlterField(
             model_name='article',
@@ -56,16 +65,31 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='role',
-            field=models.CharField(choices=[('READER', 'Reader'), ('JOURNALIST', 'Journalist'), ('EDITOR', 'Editor')], default='READER', max_length=10),
+            field=models.CharField(
+                choices=[
+                    ('READER', 'Reader'),
+                    ('JOURNALIST', 'Journalist'),
+                    ('EDITOR', 'Editor')
+                ],
+                default='READER',
+                max_length=10
+            ),
         ),
         migrations.CreateModel(
             name='Comment',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                                           primary_key=True, serialize=False,
+                                           verbose_name='ID')),
                 ('text', models.TextField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('article', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='news.article')),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('article', models.ForeignKey(on_delete=django.db.models.
+                                              deletion.CASCADE,
+                                              related_name='comments',
+                                              to='news.article')),
+                ('author', models.ForeignKey(on_delete=django.db.models.
+                                             deletion.CASCADE, to=settings
+                                             .AUTH_USER_MODEL)),
             ],
         ),
         migrations.DeleteModel(

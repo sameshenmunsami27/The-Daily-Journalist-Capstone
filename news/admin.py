@@ -10,7 +10,7 @@ from django.contrib.auth.admin import UserAdmin
 from .models import User, Article, Comment, Newsletter
 
 
-# 1. Customizing the User Admin
+# Customizing the User Admin
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
     """
@@ -43,7 +43,7 @@ class CustomUserAdmin(UserAdmin):
     )
 
 
-# 2. Customizing the Article Admin
+# Customizing the Article Admin
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
     """
@@ -57,7 +57,7 @@ class ArticleAdmin(admin.ModelAdmin):
     list_editable = ("approved",)
 
 
-# 3. Customizing the Comment Admin
+# Customizing the Comment Admin
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     """
@@ -70,7 +70,7 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ("text",)
 
 
-# 4. Customizing the Newsletter Admin
+# Customizing the Newsletter Admin
 @admin.register(Newsletter)
 class NewsletterAdmin(admin.ModelAdmin):
     """

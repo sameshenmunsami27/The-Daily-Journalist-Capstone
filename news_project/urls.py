@@ -53,18 +53,22 @@ urlpatterns = [
     path("register/", views.register, name="register"),
     path("logout/", views.logout_user, name="logout"),
     # Articles
-    path("article/<int:article_id>/", views.article_detail, name="article_detail"),
+    path("article/<int:article_id>/", views.article_detail,
+         name="article_detail"),
     path(
         "my-articles/", views.journalist_dashboard, name="journalist_dashboard"
     ),  # Added for Journalist management
     path("article/create/", views.create_article, name="create_article"),
-    path("article/edit/<int:article_id>/", views.edit_article, name="edit_article"),
+    path("article/edit/<int:article_id>/", views.edit_article,
+         name="edit_article"),
     path(
-        "article/delete/<int:article_id>/", views.delete_article, name="delete_article"
+        "article/delete/<int:article_id>/", views.delete_article,
+        name="delete_article"
     ),
     # Editor Dashboard
     path("dashboard/", views.editor_dashboard, name="editor_dashboard"),
-    path("approve/<int:article_id>/", views.approve_article, name="approve_article"),
+    path("approve/<int:article_id>/", views.approve_article,
+         name="approve_article"),
     # Newsletters
     path("newsletters/", views.newsletter_list, name="newsletter_list"),
     path(

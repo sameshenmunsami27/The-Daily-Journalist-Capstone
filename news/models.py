@@ -22,15 +22,18 @@ class User(AbstractUser):
     # Fix: Ensure email is unique across the database to prevent auth issues
     email = models.EmailField(unique=True)
 
-    role = models.CharField(max_length=10, choices=Role.choices, default=Role.READER)
+    role = models.CharField(max_length=10, choices=Role.choices,
+                            default=Role.READER)
 
     # READER SUBSCRIPTIONS
     subscribed_publishers = models.ManyToManyField(
-        "self", symmetrical=False, related_name="subscribed_readers", blank=True
+        "self", symmetrical=False, related_name="subscribed_readers",
+        blank=True
     )
 
     subscribed_journalists = models.ManyToManyField(
-        "self", symmetrical=False, related_name="journalist_followers", blank=True
+        "self", symmetrical=False, related_name="journalist_followers",
+        blank=True
     )
 
     # Ensures email is prompted when creating superusers via CLI
@@ -41,16 +44,16 @@ class User(AbstractUser):
         Override save to automatically manage staff status based on role
         and enforce role-specific field constraints.
         """
-        # 1. Staff Status Logic
+        # Staff Status Logic
         if self.role in [self.Role.JOURNALIST, self.Role.EDITOR]:
             self.is_staff = True
         else:
             self.is_staff = False
 
-        # 2. Save the instance
+        #  Save the instance
         super(User, self).save(*args, **kwargs)
 
-        # 3. Role-Based Field Enforcement
+        #  Role-Based Field Enforcement
         if self.role in [self.Role.JOURNALIST, self.Role.EDITOR]:
             # If they are a Journalist or Editor, they cannot have Reader
             # subscriptions
@@ -71,7 +74,8 @@ class Article(models.Model):
 
     title = models.CharField(max_length=200)
     content = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="articles")
+    author = models.ForeignKey(User, on_delete=models.CASCADE,
+                               related_name="articles")
     created_at = models.DateTimeField(auto_now_add=True)
     approved = models.BooleanField(default=False)
 
@@ -119,7 +123,8 @@ class Newsletter(models.Model):
         User, on_delete=models.CASCADE, related_name="newsletters"
     )
 
-    articles = models.ManyToManyField(Article, related_name="newsletters", blank=True)
+    articles = models.ManyToManyField(Article, related_name="newsletters",
+                                      blank=True)
 
     def __str__(self):
-        return self.title 
+        return self.title

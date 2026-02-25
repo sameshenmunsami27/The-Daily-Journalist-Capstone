@@ -25,11 +25,9 @@ def get_secret(key_name, default=None):
     return default
 
 
-# SECURITY WARNING: keep the secret key used in production secret!
-# Use parentheses to join the long string and avoid syntax errors
-fallback_key = "django-insecure-=(irsjgmurz1fcp2dez3)+h1jjf=" "9-=habfb=metpa(yl8#@hm"
-
-# Now use it in the function
+# Keep the secret key used in production secret.
+# In the fallback_key section below you enter the DJANGO SECRET KEY
+fallback_key = "django-insecure-placeholder-key-for-local-dev-only"
 SECRET_KEY = get_secret("DJANGO_SECRET_KEY", fallback_key)
 
 DEBUG = True
@@ -62,7 +60,7 @@ ROOT_URLCONF = "news_project.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],  # This is the line that finds your HTML files
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -78,11 +76,12 @@ TEMPLATES = [
 WSGI_APPLICATION = "news_project.wsgi.application"
 
 # DATABASE CONFIGURATION
+# Passwords and Users are now pulled from secrets_keys.txt
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": get_secret("MYSQL_DATABASE", "news_db"),
-        "USER": get_secret("MYSQL_USER", "root"),
+        "USER": get_secret("MYSQL_USER", ""),
         "PASSWORD": get_secret("MYSQL_PASSWORD", ""),
         "HOST": os.environ.get("DATABASE_HOST", "127.0.0.1"),
         "PORT": "3306",
@@ -94,11 +93,14 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+        "NAME": "django.contrib.auth.password_validation."
+        "UserAttributeSimilarityValidator"
     },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation."
+     "CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation."
+     "NumericPasswordValidator"},
 ]
 
 LANGUAGE_CODE = "en-us"
@@ -108,7 +110,6 @@ USE_TZ = True
 STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# CUSTOM PROJECT SETTINGS
 AUTH_USER_MODEL = "news.User"
 
 REST_FRAMEWORK = {
@@ -118,22 +119,22 @@ REST_FRAMEWORK = {
     ],
 }
 
-# AUTHENTICATION REDIRECTS
 LOGIN_REDIRECT_URL = "index"
 LOGOUT_REDIRECT_URL = "index"
 
 # EMAIL CONFIGURATION (GMAIL)
+# Confidential information removed and delegated to get_secret
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = get_secret("EMAIL_USER", "sameshenmunsami27@gmail.com")
-EMAIL_HOST_PASSWORD = get_secret("EMAIL_PASSWORD", "bhmkoeolypavltux")
+# Below is where you enter my email address
+EMAIL_HOST_USER = get_secret("EMAIL_USER", "")
+# Below is where you enter my email APP password
+EMAIL_HOST_PASSWORD = get_secret("EMAIL_PASSWORD", "")
 DEFAULT_FROM_EMAIL = f"The Daily Journalist <{EMAIL_HOST_USER}>"
 
 # SECURITY
 PASSWORD_RESET_TIMEOUT = 10800
 LOGOUT_ON_GET = True
-
-# Registration settings
 DEFAULT_USER_ROLE = "READER"

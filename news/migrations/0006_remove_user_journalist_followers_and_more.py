@@ -22,11 +22,15 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='subscribed_journalists',
-            field=models.ManyToManyField(blank=True, related_name='journalist_followers', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(blank=True,
+                                         related_name='journalist_followers',
+                                         to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='user',
             name='subscribed_publishers',
-            field=models.ManyToManyField(blank=True, related_name='subscribed_readers', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(blank=True,
+                                         related_name='subscribed_readers',
+                                         to=settings.AUTH_USER_MODEL),
         ),
     ]

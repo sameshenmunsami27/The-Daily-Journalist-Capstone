@@ -15,11 +15,21 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='article',
             name='author',
-            field=models.ForeignKey(limit_choices_to={'role__in': ['JOURNALIST', 'EDITOR']}, on_delete=django.db.models.deletion.CASCADE, related_name='articles_published', to=settings.AUTH_USER_MODEL),
-        ),
-        migrations.AlterField(
-            model_name='newsletter',
-            name='author',
-            field=models.ForeignKey(limit_choices_to={'role__in': ['JOURNALIST', 'EDITOR']}, on_delete=django.db.models.deletion.CASCADE, related_name='newsletters_published', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                limit_choices_to={'role__in': ['JOURNALIST', 'EDITOR']},
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='articles_published',
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]
+    migrations.AlterField(
+            model_name='newsletter',
+            name='author',
+            field=models.ForeignKey(
+                limit_choices_to={'role__in': ['JOURNALIST', 'EDITOR']},
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='newsletters_published',
+                to=settings.AUTH_USER_MODEL
+            ),
+        ),

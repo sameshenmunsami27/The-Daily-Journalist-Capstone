@@ -16,7 +16,7 @@ from .serializers import (
     NewsletterSerializer,
 )
 
-# --- CUSTOM PERMISSIONS ---
+# CUSTOM PERMISSIONS
 
 
 class IsJournalist(permissions.BasePermission):
@@ -50,7 +50,7 @@ class IsAuthorOrEditor(permissions.BasePermission):
         return obj.author == request.user
 
 
-# --- VIEWSETS ---
+# VIEWSETS
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
@@ -112,7 +112,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
         article_url = f"http://127.0.0.1:8000/article/{article.id}/"
 
-        # This call MUST be triggered for the test to pass
+        # This call must be triggered for the test to pass
         send_mail(
             subject=f"New Article Approved: {article.title}",
             message=f"Your article is live!\nView here: {article_url}",

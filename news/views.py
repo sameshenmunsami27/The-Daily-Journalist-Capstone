@@ -73,11 +73,11 @@ def article_detail(request, article_id):
         Http404: If the article is unapproved and the user is not the author
         or an editor.
     """
-    # 1. Fetch the article by ID only (removing the strict approved=
+    # Fetch the article by ID only (removing the strict approved=
     # True filter)
     article = get_object_or_404(Article, id=article_id)
 
-    # 2. Permission Check: If article is NOT approved, only Author or Editor
+    # Permission Check: If article is not approved, only Author or Editor
     # can see it
     if not article.approved:
         user_is_author = request.user == article.author
@@ -136,7 +136,6 @@ def approve_article(request, article_id):
 
         article_url = f"http://127.0.0.1:8000/article/{article.id}/"
 
-        # Fixed: Multi-line formatting for PEP 8 compliance
         send_mail(
             subject=f"New Article Approved: {article.title}",
             message=(
