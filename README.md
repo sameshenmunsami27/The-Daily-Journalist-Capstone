@@ -23,7 +23,21 @@ python -m venv venv
 PowerShell
 pip install -r requirements.txt
 
-4. Configuration (Secrets & Environment Variables)
+4. Docker Setup
+The application is containerized for easy deployment.
+
+MySQL Network Configuration
+The application is configured to connect to your local MySQL host using host.docker.internal. Ensure your MySQL service is configured to allow connections from the Docker bridge network.
+
+Build and Run the Image
+PowerShell
+# Build the Docker image
+docker build -t daily-journalist .
+
+# Run the container
+docker run -p 8000:8000 daily-journalist
+
+5. Configuration (Secrets & Environment Variables)
 Create a file named secrets_keys.txt in the root directory and add your credentials:
 If needed my secret_keys.txt file is attached containing this information
 
@@ -35,14 +49,14 @@ MYSQL_PASSWORD=your_password
 EMAIL_HOST_USER=your_email
 EMAIL_HOST_PASSWORD=your_app_password
 
-5. Database Setup (MySQL)
+6. Database Setup (MySQL)
 Ensure your MySQL server is running and the database is created. Then, run the migrations:
 
 PowerShell
 python manage.py makemigrations
 python manage.py migrate
 
-6. Create a Superuser
+7. Create a Superuser
 To access the Journalist and Editor dashboards, you must create an administrative account. In this application, the Superuser is granted both Journalist and Editor privileges automatically.
 
 PowerShell
@@ -54,7 +68,7 @@ Superuser Password: #IMPORTANT: This section asks you to enter your password how
 Superuser email: You will need to provide a valid email address.
 Once registered you will get a success message
 
-7. Run the Application
+8. Run the Application
 PowerShell
 python manage.py runserver
 Access the application at http://127.0.0.1:8000/.
