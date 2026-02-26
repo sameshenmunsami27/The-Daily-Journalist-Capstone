@@ -22,4 +22,5 @@ class NewsConfig(AppConfig):
         This is necessary to ensure signal handlers are connected
         when the application registry is fully populated.
         """
+
         import news.signals   # noqa This connects the signal logic

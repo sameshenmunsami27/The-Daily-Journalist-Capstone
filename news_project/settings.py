@@ -81,7 +81,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": get_secret("MYSQL_DATABASE", "news_db"),
-        "USER": get_secret("MYSQL_USER", ""),
+        "USER": get_secret("MYSQL_USER", "root"),
         "PASSWORD": get_secret("MYSQL_PASSWORD", ""),
         "HOST": os.environ.get("DATABASE_HOST", "127.0.0.1"),
         "PORT": "3306",

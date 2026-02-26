@@ -4,10 +4,10 @@
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
     <h2>Available Newsletters</h2>
     
-    {% if user.is_authenticated and user.role == "JOURNALIST" %}
+    {% if user.is_authenticated and user.role == "EDITOR" or user.role == "ADMIN" or user.is_superuser %}
         <a href="{% url 'create_newsletter' %}" 
            style="padding: 10px 20px; background: #e67e22; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">
-           + Create New Newsletter
+            + Create New Newsletter
         </a>
     {% endif %}
 </div>

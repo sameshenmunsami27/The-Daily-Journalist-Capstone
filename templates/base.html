@@ -37,7 +37,7 @@
 
         /* Specific Link Colors */
         .nav-write { color: #3498db !important; font-weight: bold; }
-        .nav-mustard { color: #e1ad01 !important; font-weight: bold; } /* Mustard Color */
+        .nav-mustard { color: #e1ad01 !important; font-weight: bold; }
         .nav-newsletter { color: #e67e22 !important; font-weight: bold; }
         .nav-subs { color: #2ecc71 !important; font-weight: bold; }
         .nav-editor { color: #f1c40f !important; }
@@ -70,12 +70,12 @@
                 <a href="{% url 'my_subscriptions' %}" class="nav-subs">My Subscriptions</a>
             {% endif %}
 
-            {% if user.role == "JOURNALIST" %}
+            {% if user.role == "JOURNALIST" or user.role == "ADMIN" or user.is_superuser %}
                 <a href="{% url 'journalist_dashboard' %}" class="nav-mustard">My Articles</a>
                 <a href="{% url 'create_article' %}" class="nav-write">Write Article</a>
             {% endif %}
 
-            {% if user.role == "EDITOR" or user.is_superuser %}
+            {% if user.role == "EDITOR" or user.role == "ADMIN" or user.is_superuser %}
                 <a href="{% url 'editor_dashboard' %}" class="nav-editor">Editor Dashboard</a>
             {% endif %}
             

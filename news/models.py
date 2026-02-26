@@ -18,6 +18,7 @@ class User(AbstractUser):
         READER = "READER", "Reader"
         JOURNALIST = "JOURNALIST", "Journalist"
         EDITOR = "EDITOR", "Editor"
+        ADMIN = "ADMIN", "Admin"  # Added per reviewer feedback
 
     # Fix: Ensure email is unique across the database to prevent auth issues
     email = models.EmailField(unique=True)
@@ -44,19 +45,25 @@ class User(AbstractUser):
         Override save to automatically manage staff status based on role
         and enforce role-specific field constraints.
         """
-        # Staff Status Logic
-        if self.role in [self.Role.JOURNALIST, self.Role.EDITOR]:
+        # FIX: Ensure Superusers and Admins always have is_staff = True
+        if self.is_superuser or self.role == self.Role.ADMIN:
+            self.is_staff = True
+            self.role = self.Role.ADMIN  # Auto-set role to ADMIN
+            # for superusers
+
+        # Staff Status Logic for Journalists and Editors
+        elif self.role in [self.Role.JOURNALIST, self.Role.EDITOR]:
             self.is_staff = True
         else:
             self.is_staff = False
 
-        #  Save the instance
+        # Save the instance
         super(User, self).save(*args, **kwargs)
 
-        #  Role-Based Field Enforcement
-        if self.role in [self.Role.JOURNALIST, self.Role.EDITOR]:
-            # If they are a Journalist or Editor, they cannot have Reader
-            # subscriptions
+        # Role-Based Field Enforcement
+        # Admins, Journalists, and Editors shouldn't have reader subscriptions
+        if self.role in [self.Role.JOURNALIST, self.Role.EDITOR,
+                         self.Role.ADMIN]:
             if self.pk:
                 self.subscribed_publishers.clear()
                 self.subscribed_journalists.clear()

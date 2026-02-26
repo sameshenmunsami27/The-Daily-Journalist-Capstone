@@ -33,7 +33,7 @@ class CustomUserAdmin(UserAdmin):
     # Allows changing roles directly from the list view
     list_editable = ("role",)
 
-    # This ensures your custom fields show up when editing a user
+    # This ensures the custom fields show up when editing a user
     fieldsets = UserAdmin.fieldsets + (
         (
             "Custom Fields",
